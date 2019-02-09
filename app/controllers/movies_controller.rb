@@ -14,6 +14,23 @@ class MoviesController < ApplicationController
     @all_ratings = ['G', 'PG', 'PG-13', 'R']
     
     @movies = Movie.all
+    
+    if params[:ratings]
+      @ratings_filter = params[:ratings].keys
+    else
+      if session[:ratings]
+        @ratings_filter = session[:ratings]
+      else
+        @ratings_filter = @all_ratings
+      end
+    end
+    
+    if @ratings_filter!=session[:ratings]
+      session[:ratings] = @ratings_filter
+    end
+    
+    @movies = @movies.where('rating in (?)', @ratings_filter)
+    
     if params[:sort]
       @sorting = params[:sort]
     else
