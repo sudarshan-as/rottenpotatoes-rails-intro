@@ -1,6 +1,6 @@
 class MoviesController < ApplicationController
 
-enum @all_ratings ['G', 'PG', 'PG-13', 'R']
+  @all_ratings ['G', 'PG', 'PG-13', 'R']
 
   def movie_params
     params.require(:movie).permit(:title, :rating, :description, :release_date)
