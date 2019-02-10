@@ -11,7 +11,7 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @all_ratings = ['PG', 'G', 'PG-13', 'R']
+    @all_ratings = ['G', 'PG', 'PG-13', 'R']
     
     @movies = Movie.all
     
@@ -19,7 +19,7 @@ class MoviesController < ApplicationController
       @ratings_filter = params[:ratings].keys
     else
       if session[:ratings]
-        @ratings_filter = session[:ratings]
+        @ratings_filter = session[:ratings].keys
       else
         @ratings_filter = @all_ratings
       end
