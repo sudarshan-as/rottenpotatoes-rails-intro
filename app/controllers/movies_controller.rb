@@ -19,7 +19,7 @@ class MoviesController < ApplicationController
       @ratings_filter = params[:ratings].keys
     else
       if session[:ratings]
-        @ratings_filter = session[:ratings].keys
+        @ratings_filter = session[:ratings]
       else
         @ratings_filter = @all_ratings
       end
