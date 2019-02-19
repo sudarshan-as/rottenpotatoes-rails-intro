@@ -28,27 +28,16 @@ class MoviesController < ApplicationController
     if @ratings_filter!=session[:ratings]
       session[:ratings] = @ratings_filter
     end
-    
     @movies = @movies.where('rating in (?)', @ratings_filter)
     
-    if params[:sort]
-      @sorting = params[:sort]
+    if params[:sort_title] == "title"
+ 	    @title_sort = session[:title_sort] = "hilite"
+ 	    @movies = Movie.order("title")
+    elsif params[:sort_date] == "release"
+      @release_date_sort = session[:release_date_sort]="hilite"
+      @movies = Movie.order("release_date")
     else
-      @sorting = session[:sort]
-    end
-    
-    if @sorting != session[:sort]
-      session[:sort] = @sorting
-    end
-    
-    if @sorting == 'title'
-      @movies = @movies.order(@sorting)
-      @title_sort = 'hilite'
-    elsif @sorting == 'release_date'
-      @movies = @movies.order(@sorting)
-      @release_date_sort = 'hilite'
-    else
-      @movies = Movie.all
+ 	    @movies = Movie.all
     end
   end
 
