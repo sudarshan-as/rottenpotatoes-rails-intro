@@ -23,7 +23,7 @@ class MoviesController < ApplicationController
     if params[:sort_val] == "title"
  	    @title_sort = session[:title_sort] = "hilite"
  	    @movies = Movie.order("title")
-    elsif params[:sort_val] == "release"
+    elsif params[:sort_val] == "release_date"
       @release_date_sort = session[:release_date_sort] = "hilite"
       @movies = Movie.order("release_date")
     else
@@ -34,7 +34,7 @@ class MoviesController < ApplicationController
       params[:sort_val] = "title"
       redirect_to movies_path(params)
     elsif session[:release_date_sort]=="hilite" && params[:sort_val]==nil
-      params[:sort_val] = "release"
+      params[:sort_val] = "release_date"
       redirect_to movies_path(params)
     end
   end
