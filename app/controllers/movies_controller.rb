@@ -15,28 +15,16 @@ class MoviesController < ApplicationController
     
     @movies = Movie.all
     
-    if params[:ratings]
-      @ratings_filter = params[:ratings].keys
-    else
-      if session[:ratings]
-        @ratings_filter = session[:ratings]
-      else
-        @ratings_filter = @all_ratings
-      end
-    end
     
-    if @ratings_filter!=session[:ratings]
-      session[:ratings] = @ratings_filter
-    end
-    @movies = @movies.where('rating in (?)', @ratings_filter)
+    #Initial setting up of sessions
+    session[:ratings] ||= @all_ratings
+    session[:sort_val] ||= 'id'
     
     if params[:sort_val] == "title"
  	    @title_sort = session[:title_sort] = "hilite"
- 	    @release_date_sort = session[:release_date_sort] = ""
  	    @movies = Movie.order("title")
     elsif params[:sort_val] == "release"
       @release_date_sort = session[:release_date_sort] = "hilite"
-      @title_sort = session[:title_sort] = ""
       @movies = Movie.order("release_date")
     else
  	    @movies = Movie.all
