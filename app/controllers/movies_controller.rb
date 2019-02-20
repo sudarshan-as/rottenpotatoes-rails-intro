@@ -38,6 +38,16 @@ class MoviesController < ApplicationController
      
     @movies = @movies.where({rating: session[:clicked_box].keys})
     
+    if session[:title_sort]=="hilite" && params[:sort_val]==nil 
+      params[:sort_val] = "title"
+      redirect_to movies_path(params)
+    elsif session[:release_date_sort]=="hilite" && params[:sort_val]==nil
+      params[:sort_val] = "release_date"
+      redirect_to movies_path(params)
+    elsif params[:ratings]==nil && session[:clicked_box]!=nil
+      params[:ratings]=session[:clicked_box]
+      redirect_to movies_path(params)
+    end
   end
 
   def new
