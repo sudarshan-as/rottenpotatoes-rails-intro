@@ -29,14 +29,6 @@ class MoviesController < ApplicationController
     else
  	    @movies = Movie.all
     end
-    
-    if session[:title_sort]=="hilite" && params[:sort_val]==nil 
-      params[:sort_val] = "title"
-      redirect_to movies_path(params)
-    elsif session[:release_date_sort]=="hilite" && params[:sort_val]==nil
-      params[:sort_val] = "release_date"
-      redirect_to movies_path(params)
-    end
   end
 
   def new
