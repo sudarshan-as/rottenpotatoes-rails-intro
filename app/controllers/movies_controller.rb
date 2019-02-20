@@ -30,16 +30,24 @@ class MoviesController < ApplicationController
     end
     @movies = @movies.where('rating in (?)', @ratings_filter)
     
-    if params[:sort_title] == "title"
+    if params[:sort_val] == "title"
  	    @title_sort = session[:title_sort] = "hilite"
  	    @release_date_sort = session[:release_date_sort] = ""
  	    @movies = Movie.order("title")
-    elsif params[:sort_date] == "release"
+    elsif params[:sort_val] == "release"
       @release_date_sort = session[:release_date_sort] = "hilite"
       @title_sort = session[:title_sort] = ""
       @movies = Movie.order("release_date")
     else
  	    @movies = Movie.all
+    end
+    
+    if session[:title_sort]=="hilite" && params[:sort_val]==nil 
+      params[:sort_val] = "title"
+      redirect_to movies_path(params)
+    elsif session[:release_date_sort]=="hilite" && params[:sort_val]==nil
+      params[:sort_val] = "release"
+      redirect_to movies_path(params)
     end
   end
 
