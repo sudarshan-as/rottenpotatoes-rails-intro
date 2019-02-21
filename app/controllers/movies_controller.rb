@@ -11,31 +11,26 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @all_ratings = ['G', 'PG', 'PG-13', 'R']
-    @movies = Movie.all
-    @clicked_box = params[:ratings] || session[:ratings] || nil
-        
-    # Hash to hold the check box values of the ratings
-    if @clicked_box == nil
-      @clicked_box = Hash[@all_ratings.map{|rating| [rating, rating]}]
-    end
-    
-    if params[:sort_val] != session[:sort_val] or params[:ratings] != session[:ratings]
-      session[:sort_val] = params[:sort_val] || session[:sort_val]
-      session[:ratings] = @clicked_box
-      redirect_to ratings: @clicked_box, sort: params[:sort_val] || session[:sort_val] and return
-    end
-    
-    # Sort according to title or release date
-    if params[:sort_val] || session[:sort_val] == "title"
- 	    @title_sort = "hilite"
- 	    @movies = Movie.where(rating: @clicked_box.keys).order("title")
-    elsif params[:sort_val] || session[:sort_val] == "release_date"
-      @release_date_sort = "hilite"
-      @movies = Movie.where(rating: @clicked_box.keys).order("release_date")
-    else
- 	    @movies = Movie.where(rating: @clicked_box.keys)
-    end
+      sort = params[:sort] || session[:sort]
+	    @movies = Movie.all
+	    @all_ratings = ['G','PG','PG-13','R']
+	    @clicked_box = params[:ratings] || session[:ratings] || {}
+	    if @clicked_box == {}
+	      @clicked_box = Hash[@all_ratings.map {|rating| [rating, rating]}]
+	    end
+	    
+	    if params[:sort] != session[:sort] or params[:ratings] != session[:ratings]
+	      session[:sort] = sort
+	      session[:ratings] = @clicked_box
+	      redirect_to :sort => sort, :ratings => @clicked_box and return
+	    end
+	    if sort == 'title'
+	      @movies = Movie.where(rating: @clicked_box.keys).sort_by { |h | h[:title] }
+	    elsif sort == 'release_date'
+	      @movies = Movie.where(rating: @clicked_box.keys).sort_by { |h | h[:release_date] }
+	    else
+	      @movies = Movie.where(rating: @clicked_box.keys)
+	    end
 
   end
 
