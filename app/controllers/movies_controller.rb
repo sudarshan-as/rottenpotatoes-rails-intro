@@ -13,8 +13,6 @@ class MoviesController < ApplicationController
   def index
     @all_ratings = ['G', 'PG', 'PG-13', 'R']
     
-    #Initialize sessions if not done
-    #session[:sort_val] ||= 'id'
     @clicked_box = params[:ratings] || session[:ratings] || nil
         
     # Hash to hold the check box values of the ratings
@@ -34,7 +32,7 @@ class MoviesController < ApplicationController
     end
     
     if params[:sort_val] != session[:sort_val]
-      session[:sort_val] = params[:sort_val]
+      session[:sort_val] = params[:sort_val] || session[:sort_val]
     end
     
     if params[:ratings] != session[:ratings]
