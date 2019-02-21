@@ -11,13 +11,18 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @all_ratings = Movie.ratings
+    @all_ratings = ['G', 'PG', 'PG-13', 'R']
     
     #Initialize sessions if not done
     session[:sort_val] ||= 'id'
-    session[:ratings] ||= @all_ratings
+    @clicked_box = params[:ratings] || session[:ratings] || nil
+        
+    # Hash to hold the check box values of the ratings
+    if @clicked_box == nil
+      @clicked_box = Hash[@all_ratings.map{|rating| [rating, rating]}]
+    end
     
-    # Sort according to tite or release date
+    # Sort according to title or release date
     if params[:sort_val] == "title"
  	    @title_sort = session[:title_sort] = "hilite"
  	    @movies = Movie.order("title")
@@ -28,20 +33,18 @@ class MoviesController < ApplicationController
  	    @movies = Movie.all
     end
     
-    # Hash to hold the check box values of the ratings
-    if session[:clicked_box] == nil
-      session[:clicked_box] = Hash.new()
-      @all_ratings.each do |rating|
-        session[:clicked_box][rating]=1
-      end
+    if params[:sort_val] != session[:sort_val]
+      session[:sort_val] = params[:sort_val]
     end
     
-    redirect_to movies_path(ratings: session[:clicked_box], sort: session[:sort])
+    if params[:ratings] != session[:ratings]
+      session[:ratings] = params[:ratings]
+    end
     
-    @ratings = session[:clicked_box].keys
-    @sort = session[:sort_val]
+    @movies = Movie.where(rating: session[:ratings]).order(session[:sort_val])
+    
+    redirect_to movies_path(ratings: @clicked_box, sort: session[:sort_val]) if params[:ratings].nil? || params[:sort_val].nil?
 
-    @movies = Movie.where(rating: @ratings).order(@sort_val)
   end
 
   def new
