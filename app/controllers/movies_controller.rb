@@ -12,7 +12,7 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = ['G', 'PG', 'PG-13', 'R']
-    
+    @movies = Movie.all
     @clicked_box = params[:ratings] || session[:ratings] || nil
         
     # Hash to hold the check box values of the ratings
@@ -28,10 +28,10 @@ class MoviesController < ApplicationController
     
     # Sort according to title or release date
     if params[:sort_val] || session[:sort_val] == "title"
- 	    @title_sort = session[:title_sort] = "hilite"
+ 	    @title_sort = "hilite"
  	    @movies = Movie.where(rating: @clicked_box.keys).order("title")
     elsif params[:sort_val] || session[:sort_val] == "release_date"
-      @release_date_sort = session[:release_date_sort] = "hilite"
+      @release_date_sort = "hilite"
       @movies = Movie.where(rating: @clicked_box.keys).order("release_date")
     else
  	    @movies = Movie.where(rating: @clicked_box.keys)
