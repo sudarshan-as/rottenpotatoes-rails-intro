@@ -37,7 +37,7 @@ class MoviesController < ApplicationController
       redirect_to movies_path(ratings: @clicked_box, sort: session[:sort_val])
     end
     
-    @movies = Movie.where(rating: session[:ratings]).order(session[:sort_val])
+    @movies = Movie.where(rating: @clicked_box.keys).order(session[:sort_val])
 
   end
 
