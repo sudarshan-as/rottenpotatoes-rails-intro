@@ -12,7 +12,6 @@ class MoviesController < ApplicationController
 
   def index
       sort = params[:sort] || session[:sort]
-	    #@movies = Movie.all
 	    @all_ratings = ['G','PG','PG-13','R']
 	    @clicked_box = params[:ratings] || session[:ratings] || {}
 	    if @clicked_box == {}
@@ -25,8 +24,10 @@ class MoviesController < ApplicationController
 	      redirect_to :sort => sort, :ratings => @clicked_box and return
 	    end
 	    if sort == 'title'
+	      @title_sort = "hilite"
 	      @movies = Movie.where(rating: @clicked_box.keys).sort_by { |h | h[:title] }
 	    elsif sort == 'release_date'
+	      @release_date_sort = "hilite"
 	      @movies = Movie.where(rating: @clicked_box.keys).sort_by { |h | h[:release_date] }
 	    else
 	      @movies = Movie.where(rating: @clicked_box.keys)
