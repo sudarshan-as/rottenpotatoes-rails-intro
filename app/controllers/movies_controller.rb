@@ -20,24 +20,22 @@ class MoviesController < ApplicationController
       @clicked_box = Hash[@all_ratings.map{|rating| [rating, rating]}]
     end
     
-    # Sort according to title or release date
-    if params[:sort_val] == "title"
- 	    @title_sort = session[:title_sort] = "hilite"
- 	    @movies = Movie.order("title")
-    elsif params[:sort_val] == "release_date"
-      @release_date_sort = session[:release_date_sort] = "hilite"
-      @movies = Movie.order("release_date")
-    else
- 	    @movies = Movie.all
-    end
-    
     if params[:sort_val] != session[:sort_val] or params[:ratings] != session[:ratings]
       session[:sort_val] = params[:sort_val] || session[:sort_val]
       session[:ratings] = params[:ratings]
       redirect_to movies_path(ratings: @clicked_box, sort: session[:sort_val])
     end
     
-    @movies = Movie.where(rating: @clicked_box.keys).order(session[:sort_val])
+    # Sort according to title or release date
+    if params[:sort_val] == "title"
+ 	    @title_sort = session[:title_sort] = "hilite"
+ 	    @movies = Movie.where(rating: @clicked_box.keys).order("title")
+    elsif params[:sort_val] == "release_date"
+      @release_date_sort = session[:release_date_sort] = "hilite"
+      @movies = Movie.where(rating: @clicked_box.keys).order("release_date")
+    else
+ 	    @movies = Movie.where(rating: @clicked_box.keys)
+    end
 
   end
 
