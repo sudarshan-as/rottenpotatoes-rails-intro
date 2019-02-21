@@ -14,7 +14,7 @@ class MoviesController < ApplicationController
     @all_ratings = ['G', 'PG', 'PG-13', 'R']
     
     #Initialize sessions if not done
-    session[:sort_val] ||= 'id'
+    #session[:sort_val] ||= 'id'
     @clicked_box = params[:ratings] || session[:ratings] || nil
         
     # Hash to hold the check box values of the ratings
