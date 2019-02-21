@@ -33,15 +33,15 @@ class MoviesController < ApplicationController
     
     if params[:sort_val] != session[:sort_val]
       session[:sort_val] = params[:sort_val] || session[:sort_val]
+      redirect_to movies_path(ratings: @clicked_box, sort: session[:sort_val])
     end
     
     if params[:ratings] != session[:ratings]
       session[:ratings] = params[:ratings]
+      redirect_to movies_path(ratings: @clicked_box, sort: session[:sort_val])
     end
     
     @movies = Movie.where(rating: session[:ratings]).order(session[:sort_val])
-    
-    redirect_to movies_path(ratings: @clicked_box, sort: session[:sort_val]) if params[:ratings].nil? || params[:sort_val].nil?
 
   end
 
