@@ -23,7 +23,7 @@ class MoviesController < ApplicationController
     if params[:sort_val] != session[:sort_val] or params[:ratings] != session[:ratings]
       session[:sort_val] = params[:sort_val] || session[:sort_val]
       session[:ratings] = @clicked_box
-      redirect_to ratings: @clicked_box, sort: session[:sort_val] and return
+      redirect_to ratings: @clicked_box, sort: params[:sort_val] || session[:sort_val] and return
     end
     
     # Sort according to title or release date
