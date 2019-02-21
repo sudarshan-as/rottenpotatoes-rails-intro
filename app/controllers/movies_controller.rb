@@ -19,9 +19,9 @@ class MoviesController < ApplicationController
 	    end
 	    
 	    if params[:sort_val] != session[:sort_val] or params[:ratings] != session[:ratings]
-	      session[:sort_val] = sort
+	      session[:sort_val] = sort_factor
 	      session[:ratings] = @clicked_box
-	      redirect_to :sort_val => sort, :ratings => @clicked_box and return
+	      redirect_to :sort_val => sort_factor, :ratings => @clicked_box and return
 	    end
 	    
 	    if sort_factor == 'title'
