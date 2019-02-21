@@ -11,7 +11,7 @@ class MoviesController < ApplicationController
   end
 
   def index
-      sort = params[:sort_val] || session[:sort_val]
+      @sort_var = params[:sort_val] || session[:sort_val]
 	    @all_ratings = Movie.mpaa_ratings
 	    @clicked_box = params[:ratings] || session[:ratings] || nil
 	    if @clicked_box == nil
@@ -24,10 +24,10 @@ class MoviesController < ApplicationController
 	      redirect_to :sort_val => sort, :ratings => @clicked_box and return
 	    end
 	    
-	    if sort == 'title'
+	    if @sort_var == 'title'
 	      @title_sort = "hilite"
 	      @movies = Movie.where(rating: @clicked_box.keys).order("title")
-	    elsif sort == 'release_date'
+	    elsif @sort_var == 'release_date'
 	      @release_date_sort = "hilite"
 	      @movies = Movie.where(rating: @clicked_box.keys).order("release_date")
 	    else
