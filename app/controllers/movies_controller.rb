@@ -12,7 +12,7 @@ class MoviesController < ApplicationController
 
   def index
       sort = params[:sort_val] || session[:sort_val]
-	    @all_ratings = Movie.mpaa_ratings
+	    @all_ratings = ['G','PG','PG-13','R']
 	    @clicked_box = params[:ratings] || session[:ratings] || nil
 	    if @clicked_box == nil
 	      @clicked_box = Hash[@all_ratings.map {|rating| [rating, rating]}]
