@@ -12,7 +12,7 @@ class MoviesController < ApplicationController
 
   def index
       sort = params[:sort] || session[:sort]
-	    @movies = Movie.all
+	    #@movies = Movie.all
 	    @all_ratings = ['G','PG','PG-13','R']
 	    @clicked_box = params[:ratings] || session[:ratings] || {}
 	    if @clicked_box == {}
