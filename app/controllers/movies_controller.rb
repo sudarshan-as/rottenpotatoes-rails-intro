@@ -11,18 +11,19 @@ class MoviesController < ApplicationController
   end
 
   def index
-      sort = params[:sort] || session[:sort]
-	    @all_ratings = ['G','PG','PG-13','R']
+      sort = params[:sort_val] || session[:sort_val]
+	    @all_ratings = Movie.mpaa_ratings
 	    @clicked_box = params[:ratings] || session[:ratings] || nil
 	    if @clicked_box == nil
 	      @clicked_box = Hash[@all_ratings.map {|rating| [rating, rating]}]
 	    end
 	    
-	    if params[:sort] != session[:sort] or params[:ratings] != session[:ratings]
-	      session[:sort] = sort
+	    if params[:sort_val] != session[:sort_val] or params[:ratings] != session[:ratings]
+	      session[:sort_val] = sort
 	      session[:ratings] = @clicked_box
-	      redirect_to :sort => sort, :ratings => @clicked_box and return
+	      redirect_to :sort_val => sort, :ratings => @clicked_box and return
 	    end
+	    
 	    if sort == 'title'
 	      @title_sort = "hilite"
 	      @movies = Movie.where(rating: @clicked_box.keys).order("title")
