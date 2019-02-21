@@ -27,10 +27,10 @@ class MoviesController < ApplicationController
     end
     
     # Sort according to title or release date
-    if params[:sort_val] == "title"
+    if params[:sort_val] || session[:sort_val] == "title"
  	    @title_sort = session[:title_sort] = "hilite"
  	    @movies = Movie.where(rating: @clicked_box.keys).order("title")
-    elsif params[:sort_val] == "release_date"
+    elsif params[:sort_val] || session[:sort_val] == "release_date"
       @release_date_sort = session[:release_date_sort] = "hilite"
       @movies = Movie.where(rating: @clicked_box.keys).order("release_date")
     else
