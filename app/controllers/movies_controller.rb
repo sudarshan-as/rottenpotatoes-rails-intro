@@ -13,8 +13,8 @@ class MoviesController < ApplicationController
   def index
       sort = params[:sort] || session[:sort]
 	    @all_ratings = ['G','PG','PG-13','R']
-	    @clicked_box = params[:ratings] || session[:ratings] || {}
-	    if @clicked_box == {}
+	    @clicked_box = params[:ratings] || session[:ratings] || nil
+	    if @clicked_box == nil
 	      @clicked_box = Hash[@all_ratings.map {|rating| [rating, rating]}]
 	    end
 	    
@@ -25,10 +25,10 @@ class MoviesController < ApplicationController
 	    end
 	    if sort == 'title'
 	      @title_sort = "hilite"
-	      @movies = Movie.where(rating: @clicked_box.keys).sort_by { |h | h[:title] }
+	      @movies = Movie.where(rating: @clicked_box.keys).order("title")
 	    elsif sort == 'release_date'
 	      @release_date_sort = "hilite"
-	      @movies = Movie.where(rating: @clicked_box.keys).sort_by { |h | h[:release_date] }
+	      @movies = Movie.where(rating: @clicked_box.keys).order("release_date")
 	    else
 	      @movies = Movie.where(rating: @clicked_box.keys)
 	    end
