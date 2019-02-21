@@ -11,29 +11,35 @@ class MoviesController < ApplicationController
   end
 
   def index
-      sort_factor = params[:sort_val] || session[:sort_val]
-	    @all_ratings = Movie.mpaa_ratings
-	    @clicked_box = params[:ratings] || session[:ratings] || nil
-	    if @clicked_box == nil
-	      @clicked_box = Hash[@all_ratings.map {|rating| [rating, rating]}]
-	    end
-	    
-	    if params[:sort_val] != session[:sort_val] or params[:ratings] != session[:ratings]
-	      session[:sort_val] = sort_factor
-	      session[:ratings] = @clicked_box
-	      redirect_to :sort_val => sort_factor, :ratings => @clicked_box and return
-	    end
-	    
-	    if sort_factor == 'title'
-	      @title_sort = "hilite"
-	      @movies = Movie.where(rating: @clicked_box.keys).order("title")
-	    elsif sort_factor == 'release_date'
-	      @release_date_sort = "hilite"
-	      @movies = Movie.where(rating: @clicked_box.keys).order("release_date")
-	    else
-	      @movies = Movie.where(rating: @clicked_box.keys)
-	    end
-
+    #Taking the continuous value of sort (title/release_date) if no input given yet
+    sort_factor = params[:sort_val] || session[:sort_val]
+    
+    # mpaa_ratings is array of all the ratings ["G", "PG", "PG-13", "R"]
+	  @all_ratings = Movie.mpaa_ratings
+	  
+	  # @clicked_box is the user input for the ratings filter
+	  @clicked_box = params[:ratings] || session[:ratings] || nil
+	  if @clicked_box == nil
+	    @clicked_box = Hash[@all_ratings.map {|rating| [rating, rating]}]
+	  end
+	   
+	 # for any change in the user input for ratings filter or the sort, update the session parameters  
+	  if params[:sort_val] != session[:sort_val] or params[:ratings] != session[:ratings]
+	    session[:sort_val] = sort_factor
+	    session[:ratings] = @clicked_box
+	    redirect_to :sort_val => sort_factor, :ratings => @clicked_box and return
+	  end
+	   
+	 # Sort and filter depending on user inputs for both  
+	  if sort_factor == 'title'
+	    @title_sort = "hilite"
+	    @movies = Movie.where(rating: @clicked_box.keys).order("title")
+	  elsif sort_factor == 'release_date'
+	    @release_date_sort = "hilite"
+	    @movies = Movie.where(rating: @clicked_box.keys).order("release_date")
+	  else
+	    @movies = Movie.where(rating: @clicked_box.keys)
+	  end
   end
 
   def new
